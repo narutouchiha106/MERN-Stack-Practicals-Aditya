@@ -1,0 +1,12 @@
+require('dotenv').config();
+const express=require('express'),mongoose=require('mongoose'),multer=require('multer'),path=require('path'),fs=require('fs');
+const app=express(),PORT=5409; app.use(express.json());
+const uploadDir=path.join(__dirname,'recipe_uploads');fs.mkdirSync(uploadDir,{recursive:true});
+const RecipeFile=mongoose.model('RecipeFile',new mongoose.Schema({recipeName:{type:String,required:true},originalName:String,storedName:String,mimeType:String,size:Number,createdAt:{type:Date,default:Date.now}}));
+const storage=multer.diskStorage({destination:(_r,_f,cb)=>cb(null,uploadDir),filename:(_r,f,cb)=>cb(null,Date.now()+'-'+Math.random().toString(36).slice(2,8)+path.extname(f.originalname))});
+const upload=multer({storage,limits:{fileSize:4*1024*1024},fileFilter:(_r,f,cb)=>cb(null,['image/png','image/jpeg','image/webp'].includes(f.mimetype))});
+app.get('/',(_r,res)=>res.json({app:'Recipe Image Archive',routes:['GET /api/recipes','POST /api/recipes (multipart: recipeName, photo)']}));
+app.get('/api/recipes',async(_r,res)=>{try{res.json(await RecipeFile.find().sort({createdAt:-1}))}catch(e){res.status(500).json({error:e.message})}});
+app.post('/api/recipes',upload.single('photo'),async(req,res)=>{if(!req.file)return res.status(400).json({error:'Provide a PNG, JPEG or WEBP photo under 4 MB'});if(!req.body.recipeName){fs.unlink(req.file.path,()=>{});return res.status(400).json({error:'recipeName is required'})}try{const doc=await RecipeFile.create({recipeName:req.body.recipeName,originalName:req.file.originalname,storedName:req.file.filename,mimeType:req.file.mimetype,size:req.file.size});res.status(201).json(doc)}catch(e){fs.unlink(req.file.path,()=>{});res.status(500).json({error:e.message})}});
+app.use((err,_req,res,_next)=>res.status(400).json({error:err.message}));
+mongoose.connect(process.env.MONGO_URI||'mongodb://127.0.0.1:27017/aditya_recipe_archive').then(()=>app.listen(PORT,()=>console.log(`Recipe Archive API running at http://localhost:${PORT}`))).catch(e=>{console.error('MongoDB unavailable:',e.message);process.exitCode=1});

@@ -1,36 +1,13 @@
-# MERN Stack Practicals
+# Aditya — Unique MERN Practicals 08–13
+Six distinct academic projects. Each practical has its own README with setup steps.
 
-Practical 1 to 7 for the MERN Stack practical assignment.
+| Practical | Project | Main concept |
+|---|---|---|
+| 08 | Campus Cup API | Express routes, middleware, validation |
+| 09 | Recipe Image Archive | Multer upload and MongoDB metadata |
+| 10 | BudgetTrail | MERN expense tracker |
+| 11 | Volunteer Board | CRUD, JWT authentication and roles |
+| 12 | QuizWave | Real-time quiz room with Socket.IO |
+| 13 | GearLedger | Equipment asset management |
 
-## Practicals
-
-1. React Functional Components, JSX and Component Reusability
-2. React Props, State Management and Event Handling
-3. React Forms, Controlled Components and Validation
-4. React Router Single Page Application
-5. REST APIs using Fetch API and Axios
-6. Express.js Routing and Middleware
-7. Express.js RESTful Student Records API
-
-## Updates
-
-- Practical 1–5: `App.jsx` and `App.css` have been redesigned while keeping the original practical topics and functionality.
-- Practical 1–5: added custom project-specific visual artwork and connected it to the React UI.
-- Practical 6–7: Express practicals remain backend-focused and do not require `App.jsx`/`App.css`.
-- `node_modules`, build output and temporary Vite folders are intentionally excluded from this submission ZIP.
-
-## Run React Practicals
-
-Open the required practical folder in VS Code, then run:
-
-```bash
-npm install
-npm run dev
-```
-
-## Run Express Practicals
-
-```bash
-npm install
-node server.js
-```
+Ports: APIs 5408–5413; Vite clients 5180–5183. Run MongoDB for practicals 09, 10, 11 and 13. See each practical README. These projects have not all been live browser/database tested in this environment; verify locally before submitting.
